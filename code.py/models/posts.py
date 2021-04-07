@@ -2,16 +2,17 @@ import sqlite3
 from db import db
 
 
-class userPosts(db.Model):
+class Posts(db.Model):
     __tablename__ = 'posts'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80))
     content = db.Column(db.String(250))
+    likes = db.Column(db.Integer,db.ForeignKey('like.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    users_posts = db.relationship('UserModel', lazy='dynamic')
-    replies = db.relationship('postReplies', lazy='dynamic')
+    users_posts = db.relationship('UserModel')
+    replies = db.relationship('postReplies')
 
 
     def __init__(self, title, content, user_id):

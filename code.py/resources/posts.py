@@ -1,5 +1,5 @@
 import sqlite3
-from models.userPosts import userPosts
+from models.posts import Posts
 from flask_restful import Resource, reqparse
 
 class createPost(Resource):
@@ -24,6 +24,6 @@ class createPost(Resource):
 
     def post(self):
         data = createPost.parser.parse_args()
-        post = userPosts(**data)
+        post = Posts(**data)
         post.save_to_db()
         return{"message": "Post created successfully."}, 201

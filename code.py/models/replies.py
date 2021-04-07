@@ -2,7 +2,7 @@ import sqlite3
 from db import db
 
 
-class postReplies(db.Model):
+class Replies(db.Model):
     __tablename__ = 'replies'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +19,13 @@ class postReplies(db.Model):
     def json(self):
         return {'content': self.content}
 
+    @classmethod
+    def find_by_id(cls, reply_id):
+        return cls.query.filter_by(id=reply_id).first()
+
+    @classmethod
+    def find_replys_by_post_id(cls, post_id):
+        return cls.query.filter_by(post_id=post_id).all()
 
     def save_to_db(self):
         db.session.add(self)
