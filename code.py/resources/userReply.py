@@ -10,6 +10,11 @@ class replyPost(Resource):
         required=True,
         help="This field cannot be blank."
     )
+    parser.add_argument('post_id',
+        type=int,
+        required=True,
+        help="Every reply needs a post_ID."
+    )
 
     def post(self):
         data = postReplies.parser.parse_args()

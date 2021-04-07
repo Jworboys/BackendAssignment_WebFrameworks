@@ -5,6 +5,8 @@ from db import db
 
 from security import authenticate, identity
 from resources.user import UserRegister
+from resources.userPost import createPost
+from resources.userReply import replyPost
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -20,7 +22,7 @@ def create_table():
 jwt = JWT(app, authenticate, identity)
 
 api.add_resource(UserRegister, '/register')
-
+api.add_resource(createPost,'/new_post' )
 if __name__ == '__main__':
     db.init_app(app)
     app.run(port=5000, debug=True)

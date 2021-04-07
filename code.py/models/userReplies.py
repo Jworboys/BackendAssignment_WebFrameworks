@@ -13,6 +13,7 @@ class postReplies(db.Model):
 
     def __init__(self, content, post_id):
         self.content = content
+        self.post_id = post_id
 
     
     def json(self):

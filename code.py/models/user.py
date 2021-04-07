@@ -9,6 +9,8 @@ class UserModel(db.Model):
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
 
+    posts = db.relationship('userPosts', lazy='dynamic')
+
     def __init__(self, username, password):
         self.username = username
         self.password = password
@@ -17,10 +19,13 @@ class UserModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
+
+    def json(self):
+        return {'username': self.username, 'posts' : [post.json() for post in self.posts.all()]}
+
     @classmethod
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
-
 
     @classmethod
     def find_by_id(cls, _id):

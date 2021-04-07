@@ -15,6 +15,11 @@ class createPost(Resource):
         required=True,
         help="This field cannot be blank."
     )
+    parser.add_argument('user_id',
+        type=int,
+        required=True,
+        help="Every post needs a user_ID."
+    )
 
 
     def post(self):
