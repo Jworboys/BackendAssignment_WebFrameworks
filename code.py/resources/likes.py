@@ -1,5 +1,5 @@
 import sqlite3
-from models.likes import Likes
+from models.likes import LikesModel
 from flask_restful import Resource, reqparse
 
 class likePost(Resource):
@@ -14,6 +14,6 @@ class likePost(Resource):
 
     def post(self):
         data = likePost.parser.parse_args()
-        post = Likes(**data)
+        post = LikesModel(**data)
         post.save_to_db()
-        return{"message": "Post created successfully."}, 201
+        return{"message": "Post liked successfully."}, 201

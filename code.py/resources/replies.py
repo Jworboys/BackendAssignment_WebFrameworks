@@ -1,5 +1,5 @@
 import sqlite3
-from models.replies import Replies
+from models.replies import RepliesModel
 from flask_restful import Resource, reqparse
 
 class replyPost(Resource):
@@ -15,23 +15,35 @@ class replyPost(Resource):
         required=True,
         help="Every reply needs a post_ID."
     )
+    parser.add_argument('user_id',
+        type=int,
+        required=True,
+        help="Every reply needs a user_id."
+    )
 
 
     def post(self):
         data = replyPost.parser.parse_args()
-        post = Replies(**data)
+        post = RepliesModel(**data)
         post.save_to_db()
         return{"message": "Reply created successfully."}, 201
 
+
+#Obatin a reply by its' ID.
 class obtainReply(Resource):
     def get(self, reply_id):
-        reply = Replies.find_by_id(reply_id)
+        reply = RepliesModel.find_by_id(reply_id)
         if reply:
             return reply.json()
         return {"message": "Reply not found."}, 404
 
+#Obtain all replies linked to a post_id.
 class replyList_byPost(Resource):
     def get(self, post_id):
-        reply = Replies.find_replys_by_post_id(post_id)
-        return {'replies' : [reply.json() for reply in Replies.query.all()]}
+        return {'replies' : [reply.json() for reply in RepliesModel.query.filter_by(post_id=post_id).all()]}
 
+
+#Obtain all replies linked to a user_id.
+class replyList_byUser(Resource):
+    def get(self, user_id):
+        return {'reply' : [reply.json() for reply in RepliesModel.query.filter_by(user_id=user_id).all()]}

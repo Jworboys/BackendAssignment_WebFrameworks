@@ -9,7 +9,8 @@ class UserModel(db.Model):
     username = db.Column(db.String(80))
     password = db.Column(db.String(80))
 
-    posts = db.relationship('userPosts')
+    posts = db.relationship('PostsModel')
+
 
     def __init__(self, username, password):
         self.username = username
