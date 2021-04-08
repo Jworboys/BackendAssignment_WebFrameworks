@@ -21,8 +21,6 @@ class ReplyPost(Resource):
         required=True,
         help="Every reply needs a user_id."
     )
-
-
     def post(self):
         data = ReplyPost.parser.parse_args()
         post = RepliesModel(**data)
@@ -37,6 +35,22 @@ class DeleteReply(Resource):
         if reply:
             reply.delete_from_db()
         return {'message' : 'Reply deleted'}, 201
+
+#Gives capability to edit a reply.
+class EditReply(Resource):
+    def post(self, reply_id):
+        data = ReplyPost.parser.parse_args()
+        reply = RepliesModel.find_by_id(reply_id)
+
+        if reply is None:
+            return {'message' : 'Reply does not exist'}, 200
+        else: 
+            reply.user_id = data['user_id']
+            reply.post_id = data['post_id']
+            reply.content = data['content'] 
+        reply.save_to_db()
+        return {'message': 'Reply updated'}, 201
+        
 
 #Obatin a reply by its' ID.
 class ObtainReply(Resource):

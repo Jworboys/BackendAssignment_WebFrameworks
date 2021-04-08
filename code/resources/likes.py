@@ -16,7 +16,6 @@ class LikePost(Resource):
         help="Every like needs a user."
     )
 
-
     def post(self):
         data = LikePost.parser.parse_args()
         post = LikesModel(**data)
