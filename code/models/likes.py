@@ -15,6 +15,11 @@ class LikesModel(db.Model):
         self.user_id = user_id
         self.post_id = post_id
 
+
+    @classmethod
+    def find_by_id(cls, like_id):
+        return cls.query.filter_by(id=like_id).first()
+
     def json(self):
         return {'user': self.user_id}
 

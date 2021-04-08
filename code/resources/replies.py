@@ -2,7 +2,8 @@ import sqlite3
 from models.replies import RepliesModel
 from flask_restful import Resource, reqparse
 
-class replyPost(Resource):
+
+class ReplyPost(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('content',
@@ -23,27 +24,35 @@ class replyPost(Resource):
 
 
     def post(self):
-        data = replyPost.parser.parse_args()
+        data = ReplyPost.parser.parse_args()
         post = RepliesModel(**data)
         post.save_to_db()
         return{"message": "Reply created successfully."}, 201
 
 
+#Delete a reply by it's Id.
+class DeleteReply(Resource):
+    def delete(self, reply_id):
+        reply = RepliesModel.find_by_id(reply_id)
+        if reply:
+            reply.delete_from_db()
+        return {'message' : 'Reply deleted'}, 201
+
 #Obatin a reply by its' ID.
-class obtainReply(Resource):
+class ObtainReply(Resource):
     def get(self, reply_id):
         reply = RepliesModel.find_by_id(reply_id)
         if reply:
-            return reply.json()
+            return reply.json(), 200
         return {"message": "Reply not found."}, 404
 
 #Obtain all replies linked to a post_id.
-class replyList_byPost(Resource):
+class ReplyList_byPost(Resource):
     def get(self, post_id):
-        return {'replies' : [reply.json() for reply in RepliesModel.query.filter_by(post_id=post_id).all()]}
+        return {'replies' : [reply.json() for reply in RepliesModel.query.filter_by(post_id=post_id).all()]}, 200
 
 
 #Obtain all replies linked to a user_id.
-class replyList_byUser(Resource):
+class ReplyList_byUser(Resource):
     def get(self, user_id):
-        return {'reply' : [reply.json() for reply in RepliesModel.query.filter_by(user_id=user_id).all()]}
+        return {'reply' : [reply.json() for reply in RepliesModel.query.filter_by(user_id=user_id).all()]}, 200

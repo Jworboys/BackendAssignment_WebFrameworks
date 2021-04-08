@@ -20,8 +20,14 @@ class PostsModel(db.Model):
         self.content = content
         self.user_id = user_id
 
+
+    @classmethod
+    def find_by_id(cls, post_id):
+        return cls.query.filter_by(id=post_id).first()
+
+        
     def json(self):
-        return {'title': self.title, 'content': self.content, 'replies' : [reply.json() for reply in self.replies.all()], 'likes': [like.json() for like in self.likes.all()] }
+        return {'id':self.id, 'user_id': self.user_id, 'title': self.title, 'content': self.content, 'replies' : [reply.json() for reply in self.replies], 'likes': [like.json() for like in self.likes] }
 
     def save_to_db(self):
         db.session.add(self)
